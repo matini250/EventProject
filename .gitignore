@@ -1,0 +1,86 @@
+# .NET Build artifacts
+bin/
+obj/
+*.dll
+*.pdb
+*.exe
+*.so
+*.dylib
+*.app
+
+# Rider Project Files
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs, database, and result files
+*.log
+*.tlog
+*.cache
+*.db
+*.mdb
+*.ldb
+*.sqlite
+*.bak
+*.mdf
+*.ldf
+
+# Dependency directories
+node_modules/
+packages/
+bower_components/
+
+# NuGet
+*.nupkg
+.nuget/
+project.lock.json
+project.assets.json
+
+# ASP.NET specific
+appsettings.Development.json
+appsettings.Local.json
+appsettings.Production.json
+appsettings.Staging.json
+appsettings.Test.json
+
+# Entity Framework
+Migrations/
+*.mdf
+*.ldf
+
+# Resharper
+*.DotSettings.user
+
+# Rider
+.idea/
+*.sln.iml
+
+# MacOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux/MacOS system files
+._*
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# JetBrains Rider / Resharper
+*.DotSettings
+_ReSharper*/
+
+# Temporary files
+*.tmp
+*.temp
