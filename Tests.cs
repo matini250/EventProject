@@ -148,8 +148,9 @@ namespace EventManagementSystem.Tests
             {
                 context.Database.EnsureDeleted();
                 var event1 = new Event { Name = "Concert", Date = DateTime.Now };
-                var ticket1 = new Ticket { Price = 50, Seat = "A1" };
-                var ticket2 = new Ticket { Price = 70, Seat = "A2" };
+                var ticket1 = new Ticket { Price = 49.99M, Seat = "D9" };
+                var ticket2 = new Ticket { Price = 104.99M, Seat = "A1" };
+                var customer = new Customer { Name = "Nicki Lauda", Email = "niki.istLauda@f1.com" };
 
                 ticket1.SetAvailability(true); // Ticket verfügbar machen
                 ticket2.SetAvailability(true); // Ticket verfügbar machen
@@ -157,7 +158,10 @@ namespace EventManagementSystem.Tests
                 event1.AddTicket(ticket1);
                 event1.AddTicket(ticket2);
 
-                
+                customer.BookTicket(ticket1); // Buchung hinzufügen
+                customer.BookTicket(ticket2); // Buchung hinzufügen
+
+                context.Customers.Add(customer);
 
                 context.Events.Add(event1);
                 context.SaveChanges();
@@ -167,7 +171,7 @@ namespace EventManagementSystem.Tests
                 Assert.NotNull(savedEvent);
 
                 var revenue = savedEvent!.GetRevenue(); // Einnahmen berechnen
-                Assert.Equal(120m, revenue); // Einnahmen sollten 50 + 70 = 120 sein
+                Assert.Equal(154.98M, revenue); // Einnahmen sollten 50 + 70 = 120 sein
             }
         }
 
