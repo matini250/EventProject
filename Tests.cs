@@ -9,11 +9,11 @@ namespace EventManagementSystem.Tests
     public class Tests
     {
         // Hilfsmethode, um eine InMemory-Datenbank zu erstellen
-                private ApplicationDbContext CreateInMemoryDbContext()
+        private ApplicationDbContext CreateInMemoryDbContext()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseLazyLoadingProxies()
-                .UseInMemoryDatabase("EventManagementSystemInMemoryDb")   // In-Memory-Datenbank
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())  // Jede DB bekommt eine eindeutige ID
                 .Options;
 
             return new ApplicationDbContext(options);
@@ -36,8 +36,9 @@ namespace EventManagementSystem.Tests
         {
             using (var context = CreateInMemoryDbContext())
             {
+                context.Database.EnsureDeleted();
                 var admin = new Administrator { Name = "Admin", Email = "admin@example.com" };
-                var customer = new Customer { Name = "Customer", Email = "customer@example.com" };
+                var customer = new Customer { Name = "Customer1", Email = "customer1@example.com" };
 
                 // Überprüfen, ob der Administrator und der Kunde schon existieren
                 if (!context.Administrators.Any())
@@ -59,6 +60,7 @@ namespace EventManagementSystem.Tests
         {
             using (var context = CreateInMemoryDbContext())
             {
+                context.Database.EnsureDeleted();
                 var event1 = new Event { Name = "Concert", Date = DateTime.Now };
                 var ticket = new Ticket { Price = 50m, Seat = "A1" };
 
@@ -79,6 +81,7 @@ namespace EventManagementSystem.Tests
         {
             using (var context = CreateInMemoryDbContext())
             {
+                context.Database.EnsureDeleted();
                 var eventObj = new Event
                 {
                     Name = "Concert",
@@ -117,16 +120,19 @@ namespace EventManagementSystem.Tests
         {
             using (var context = CreateInMemoryDbContext())
             {
+                context.Database.EnsureDeleted();
                 var ticket = new Ticket { Seat = "A1", Price = 50 };
                 ticket.SetAvailability(true); // Verfügbarkeit sicherstellen
 
                 var customer = new Customer { Name = "Jane Doe", Email = "jane.doe@example.com" };
                 customer.BookTicket(ticket); // Buchung hinzufügen
-
+                
+                
                 context.Customers.Add(customer);
                 context.SaveChanges();
 
                 var savedCustomer = context.Customers.Include(c => c.BookedTickets).FirstOrDefault();
+               // throw new Exception($"Saved customer: {savedCustomer.Name}, Email: {savedCustomer.Email}");
                 Assert.NotNull(savedCustomer); // Kunde sollte nicht null sein
 
                 var activeBookings = savedCustomer!.GetActiveBookings(); 
@@ -140,9 +146,10 @@ namespace EventManagementSystem.Tests
 {
             using (var context = CreateInMemoryDbContext())
             {
+                context.Database.EnsureDeleted();
                 var event1 = new Event { Name = "Concert", Date = DateTime.Now };
-                var ticket1 = new Ticket { Price = 50m, Seat = "A1" };
-                var ticket2 = new Ticket { Price = 70m, Seat = "A2" };
+                var ticket1 = new Ticket { Price = 50, Seat = "A1" };
+                var ticket2 = new Ticket { Price = 70, Seat = "A2" };
 
                 ticket1.SetAvailability(true); // Ticket verfügbar machen
                 ticket2.SetAvailability(true); // Ticket verfügbar machen
@@ -150,10 +157,13 @@ namespace EventManagementSystem.Tests
                 event1.AddTicket(ticket1);
                 event1.AddTicket(ticket2);
 
+                
+
                 context.Events.Add(event1);
                 context.SaveChanges();
 
                 var savedEvent = context.Events.Include(e => e.Tickets).FirstOrDefault();
+                // throw new Exception($"event: {savedEvent}");
                 Assert.NotNull(savedEvent);
 
                 var revenue = savedEvent!.GetRevenue(); // Einnahmen berechnen
@@ -167,6 +177,7 @@ namespace EventManagementSystem.Tests
         {
             using (var context = CreateInMemoryDbContext())
             {
+                context.Database.EnsureDeleted();
                 var ticket = new Ticket { Seat = "B1", Price = 100 };
                 ticket.SetAvailability(true);
                 var customer = new Customer { Name = "John Doe", Email = "john.doe@example.com" };
@@ -188,6 +199,7 @@ namespace EventManagementSystem.Tests
         {
             using (var context = CreateInMemoryDbContext())
             {
+                context.Database.EnsureDeleted();
                 var address = new Address
                 {
                     Street = "123 Main St",
@@ -216,6 +228,7 @@ namespace EventManagementSystem.Tests
         {
             using (var context = CreateInMemoryDbContext())
             {
+                context.Database.EnsureDeleted();
                 var address = new Address
                 {
                     Street = "123 Main St",
